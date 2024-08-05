@@ -1,24 +1,15 @@
 /** @format */
 
 import { StatusBar } from "expo-status-bar";
-import { FlatList, Image, StyleSheet, Text, View } from "react-native";
-import { supabase } from "./utils/supabase";
-import { useState, useEffect } from "react";
-import { Post } from "./types";
+import { FlatList, Image, Text, View } from "react-native";
+import { useState } from "react";
+import { Post } from "./models/types";
+import { useFetchingPosts } from "./hooks/useFetchingPosts";
 
 export default function App() {
   const [posts, setPosts] = useState<Post[]>([]);
-  useEffect(() => {
-    async function fetchPosts() {
-      const { data, error } = await supabase.from("Posts").select("*");
-      if (error) {
-        console.log(error);
-      } else {
-        setPosts(data);
-      }
-    }
-    fetchPosts();
-  }, []);
+
+  useFetchingPosts(setPosts);
   return (
     <View className="flex-1 justify-center items-center pt-20 bg-white ">
       <FlatList
